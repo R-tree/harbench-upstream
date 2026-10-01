@@ -37,20 +37,20 @@ OPPORTUNITY_URL = "https://archive.ics.uci.edu/static/public/226/opportunity+act
 
 # Select 113 sensor channels (based on DeepConvLSTM implementation)
 # Column 0 of original data is timestamp, columns 1-133 are body-worn sensors, columns 134-242 are object/ambient sensors
-# Column 243 is mid-level gesture label, column 244 is locomotion label
+# Column 243 is the locomotion label, column 249 the mid-level gesture label
 def select_columns_opp(data):
     """
-    Select 113 columns used in OPPORTUNITY challenge
+    Select 113 sensor channels used in OPPORTUNITY challenge, plus time and the two label columns
 
     - Columns 46-49, 59-62, 72-75, 85-88, 98-101: IMU Quaternions (removed)
     - Columns 134-242: Object/ambient sensors (removed)
     - Columns 244-248: Others (removed)
 
     Args:
-        data: Original data matrix (samples, 249)
+        data: Original data matrix (samples, 250)
 
     Returns:
-        Selected 113 columns of sensor data (samples, 113)
+        Time, the 113 sensor channels and the locomotion and gesture labels (samples, 116)
     """
     features_delete = np.arange(46, 50)
     features_delete = np.concatenate([features_delete, np.arange(59, 63)])
@@ -128,7 +128,7 @@ SENSOR_GROUPS = {
 }
 
 # Label column (mid-level gestures)
-LABEL_COLUMN = 243  # Column number in original data
+LABEL_COLUMN = 249  # Column number in original data
 
 
 @register_preprocessor('opportunity')
@@ -312,9 +312,8 @@ class OpportunityPreprocessor(BasePreprocessor):
                     # Column selection (extract 113 channels)
                     selected_data = select_columns_opp(data)
 
-                    # Extract labels (mid-level gestures: column 113 after selection, originally column 243)
-                    # select_columns_opp keeps column 0, columns 1-113 are sensors, column 114 is label
-                    labels = selected_data[:, 113].astype(np.int32)
+                    # After select_columns_opp: 0 time, 1-113 sensors, 114 locomotion, 115 gestures
+                    labels = selected_data[:, 115].astype(np.int32)
 
                     # Extract sensor data only (columns 1-113)
                     sensor_data = selected_data[:, 1:114]
