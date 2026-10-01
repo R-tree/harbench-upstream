@@ -282,8 +282,8 @@ DATASETS = {
             "RLA": ["ACC", "GYRO", "MAG"],
             "LUA": ["ACC", "GYRO", "MAG"],
             "LLA": ["ACC", "GYRO", "MAG"],
-            "L_SHOE": ["ACC", "GYRO", "MAG"],
-            "R_SHOE": ["ACC", "GYRO", "MAG"],
+            "L_SHOE": ["ACC", "GYRO"],
+            "R_SHOE": ["ACC", "GYRO"],
         },
         "n_classes": 17,  # Number of valid mid-level gesture classes
         "sampling_rate": 30,  # Hz (already 30Hz, no resampling needed)

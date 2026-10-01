@@ -62,68 +62,66 @@ def select_columns_opp(data):
     return np.delete(data, features_delete, 1)
 
 
-# Sensor channel group definitions (113 channels)
-# Each IMU has 17 channels - 4 channels (QUAT) = 13 channels
-# Column numbers are 0-indexed after selection
+# Sensor channel groups, 0-indexed into the 113 sensor channels
+# 0-35 are 12 standalone accelerometers and are not used here.
+# The five jacket IMUs have 9 channels each once the quaternions are removed.
+# The shoes have 16 channels each and no magnetometer; we take their
+# body-frame acceleration and angular velocity.
 SENSOR_GROUPS = {
     'BACK': {
-        'channels': list(range(0, 13)),  # 13 channels
+        'channels': list(range(36, 45)),  # 9 channels
         'modalities': {
-            'ACC': list(range(0, 3)),    # Accelerometer X, Y, Z
-            'GYRO': list(range(3, 6)),   # Gyroscope X, Y, Z
-            'MAG': list(range(6, 9)),    # Magnetometer X, Y, Z
+            'ACC': list(range(36, 39)),    # Accelerometer X, Y, Z
+            'GYRO': list(range(39, 42)),   # Gyroscope X, Y, Z
+            'MAG': list(range(42, 45)),    # Magnetometer X, Y, Z
         }
     },
     'RUA': {  # Right Upper Arm
-        'channels': list(range(13, 26)),
+        'channels': list(range(45, 54)),
         'modalities': {
-            'ACC': list(range(13, 16)),
-            'GYRO': list(range(16, 19)),
-            'MAG': list(range(19, 22)),
+            'ACC': list(range(45, 48)),
+            'GYRO': list(range(48, 51)),
+            'MAG': list(range(51, 54)),
         }
     },
     'RLA': {  # Right Lower Arm
-        'channels': list(range(26, 39)),
+        'channels': list(range(54, 63)),
         'modalities': {
-            'ACC': list(range(26, 29)),
-            'GYRO': list(range(29, 32)),
-            'MAG': list(range(32, 35)),
+            'ACC': list(range(54, 57)),
+            'GYRO': list(range(57, 60)),
+            'MAG': list(range(60, 63)),
         }
     },
     'LUA': {  # Left Upper Arm
-        'channels': list(range(39, 52)),
+        'channels': list(range(63, 72)),
         'modalities': {
-            'ACC': list(range(39, 42)),
-            'GYRO': list(range(42, 45)),
-            'MAG': list(range(45, 48)),
+            'ACC': list(range(63, 66)),
+            'GYRO': list(range(66, 69)),
+            'MAG': list(range(69, 72)),
         }
     },
     'LLA': {  # Left Lower Arm
-        'channels': list(range(52, 65)),
+        'channels': list(range(72, 81)),
         'modalities': {
-            'ACC': list(range(52, 55)),
-            'GYRO': list(range(55, 58)),
-            'MAG': list(range(58, 61)),
+            'ACC': list(range(72, 75)),
+            'GYRO': list(range(75, 78)),
+            'MAG': list(range(78, 81)),
         }
     },
     'L_SHOE': {  # Left Shoe
-        'channels': list(range(65, 78)),
+        'channels': list(range(81, 97)),  # 16 channels
         'modalities': {
-            'ACC': list(range(65, 68)),
-            'GYRO': list(range(68, 71)),
-            'MAG': list(range(71, 74)),
+            'ACC': list(range(87, 90)),    # Body_Ax, Body_Ay, Body_Az
+            'GYRO': list(range(90, 93)),   # AngVelBodyFrameX, Y, Z
         }
     },
     'R_SHOE': {  # Right Shoe
-        'channels': list(range(78, 91)),
+        'channels': list(range(97, 113)),
         'modalities': {
-            'ACC': list(range(78, 81)),
-            'GYRO': list(range(81, 84)),
-            'MAG': list(range(84, 87)),
+            'ACC': list(range(103, 106)),
+            'GYRO': list(range(106, 109)),
         }
     },
-    # Note: Remaining 22 channels (91-112) are additional accelerometer sensors
-    # (HIP, RKN, LKN, etc.) but excluded for consistency with other datasets
     # Each sensor group should have 3 channels (X, Y, Z) per modality
 }
 
