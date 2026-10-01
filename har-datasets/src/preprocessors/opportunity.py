@@ -150,6 +150,11 @@ class OpportunityPreprocessor(BasePreprocessor):
         # Sensor groups
         self.sensor_groups = SENSOR_GROUPS
         self.sensor_names = list(SENSOR_GROUPS.keys())
+        self.used_channels = sorted(
+            ch for group in SENSOR_GROUPS.values()
+            for channels in group['modalities'].values()
+            for ch in channels
+        )
 
         # Preprocessing parameters
         self.window_size = config.get('window_size', 150)  # 5 seconds @ 30Hz
@@ -381,8 +386,12 @@ class OpportunityPreprocessor(BasePreprocessor):
         for person_id, sessions in data.items():
             cleaned_sessions = []
             for session_data, session_labels in sessions:
-                # Remove rows containing NaN/Inf
-                cleaned_data, cleaned_labels = filter_invalid_samples(session_data, session_labels)
+                # Only check the channels we keep; the unused standalone RH
+                # accelerometer is missing in almost every row of S1.
+                # Passing row numbers as labels gives back the rows that survive the filter.
+                used = session_data[:, self.used_channels]
+                _, kept_rows = filter_invalid_samples(used, np.arange(len(used)))
+                cleaned_data, cleaned_labels = session_data[kept_rows], session_labels[kept_rows]
 
                 if len(cleaned_data) == 0:
                     continue
