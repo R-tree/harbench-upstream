@@ -288,7 +288,7 @@ DATASETS = {
         "n_classes": 17,  # Number of valid mid-level gesture classes
         "sampling_rate": 30,  # Hz (already 30Hz, no resampling needed)
         "original_sampling_rate": 30,  # Hz
-        "scale_factor": 9.8,  # m/s² -> G conversion (ACC only)
+        "scale_factor": 1000,  # milli g -> G conversion (ACC only)
         "has_undefined_class": True,  # Label -1 (Null class) exists
         "labels": {
             -1: 'Null',  # Undefined/no operation

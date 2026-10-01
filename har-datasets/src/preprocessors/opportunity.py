@@ -160,7 +160,7 @@ class OpportunityPreprocessor(BasePreprocessor):
         self.window_size = config.get('window_size', 150)  # 5 seconds @ 30Hz
         self.stride = config.get('stride', 30)  # 1 second @ 30Hz
 
-        # Scaling factor (m/s^2 -> G conversion)
+        # Scaling factor (milli g -> G conversion)
         self.scale_factor = DATASETS.get('OPPORTUNITY', {}).get('scale_factor', None)
 
     def get_dataset_name(self) -> str:
